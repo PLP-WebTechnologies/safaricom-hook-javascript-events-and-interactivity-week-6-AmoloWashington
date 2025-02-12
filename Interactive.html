@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Elements and Form Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            transition: background-color 0.3s;
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        #modal button {
+            display: block;
+            margin: 10px auto;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Button to toggle background color -->
+    <button id="toggleBgButton">Toggle Background Color</button>
+
+    <!-- Slider with real-time feedback -->
+    <div>
+        <p>Adjust the text size:</p>
+        <input type="range" id="textSlider" min="10" max="50" value="16">
+        <p id="textParagraph" style="font-size: 16px;">This text changes size dynamically.</p>
+    </div>
+
+    <!-- Modal with event listeners -->
+    <button id="openModalButton">Open Modal</button>
+    <div id="modal">
+        <p>This is a modal!</p>
+        <button id="closeModalButton">Close</button>
+    </div>
+
+    <!-- Form with validation -->
+    <form id="validationForm">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            <div id="nameError" class="error"></div>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <div id="emailError" class="error"></div>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <div id="passwordError" class="error"></div>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Dropdown menu with onchange event -->
+    <div>
+        <label for="dropdown">Choose an option:</label>
+        <select id="dropdown">
+            <option value="">--Select--</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+        <p id="dropdownMessage"></p>
+    </div>
+
+    <script>
+        // Toggle background color
+        const toggleBgButton = document.getElementById('toggleBgButton');
+        let isDefaultBg = true;
+        toggleBgButton.addEventListener('click', () => {
+            document.body.style.backgroundColor = isDefaultBg ? '#d3e0ea' : '#f4f4f4';
+            isDefaultBg = !isDefaultBg;
+        });
+
+        // Slider with real-time feedback
+        const textSlider = document.getElementById('textSlider');
+        const textParagraph = document.getElementById('textParagraph');
+        textSlider.addEventListener('input', () => {
+            textParagraph.style.fontSize = `${textSlider.value}px`;
+        });
+
+        // Modal with event listeners
+        const openModalButton = document.getElementById('openModalButton');
+        const closeModalButton = document.getElementById('closeModalButton');
+        const modal = document.getElementById('modal');
+
+        openModalButton.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Form validation
+        const validationForm = document.getElementById('validationForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        validationForm.addEventListener('submit', (e) => {
+            let isValid = true;
+
+            // Validate name
+            if (nameInput.value.length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters.';
+                isValid = false;
+            } else {
+                nameError.textContent = '';
+            }
+
+            // Validate email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = 'Enter a valid email.';
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            // Validate password
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordPattern.test(passwordInput.value)) {
+                passwordError.textContent = 'Password must be at least 8 characters, include an uppercase letter and a number.';
+                isValid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+
+        // Dropdown onchange event
+        const dropdown = document.getElementById('dropdown');
+        const dropdownMessage = document.getElementById('dropdownMessage');
+
+        dropdown.addEventListener('change', () => {
+            dropdownMessage.textContent = dropdown.value ? `You selected: ${dropdown.value}` : '';
+        });
+    </script>
+</body>
+</html>
